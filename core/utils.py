@@ -240,6 +240,7 @@ def make_atari(env_id, skip=4, max_episode_steps=None):
     return env
 
 def make_minetest(env_id, skip=4, max_episode_steps=None):
+<<<<<<< HEAD
     """Make Minetest game
     Parameters
     ----------
@@ -282,6 +283,12 @@ def make_env(env_id, seed, idx, capture_video, video_frequency, run_name):
         return env
 
     return thunk
+=======
+    # TODO: change to minetest
+    return make_atari(env_id, skip, max_episode_steps)
+
+
+>>>>>>> origin/minetest
 
 def set_seed(seed):
     # set seed
