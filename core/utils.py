@@ -239,6 +239,11 @@ def make_atari(env_id, skip=4, max_episode_steps=None):
         env = TimeLimit(env, max_episode_steps=max_episode_steps)
     return env
 
+def make_minetest(env_id, skip=4, max_episode_steps=None):
+    # TODO: change to minetest
+    return make_atari(env_id, skip, max_episode_steps)
+
+
 
 def set_seed(seed):
     # set seed
