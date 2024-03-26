@@ -10,3 +10,6 @@ __pycache__/
 # results dir
 /results
 /files
+
+# Ctree stuff
+/core/ctree
