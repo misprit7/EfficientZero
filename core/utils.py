@@ -240,7 +240,6 @@ def make_atari(env_id, skip=4, max_episode_steps=None):
     return env
 
 def make_minetest(env_id, skip=4, max_episode_steps=None):
-<<<<<<< HEAD
     """Make Minetest game
     Parameters
     ----------
@@ -252,43 +251,12 @@ def make_minetest(env_id, skip=4, max_episode_steps=None):
         max moves for an episode
     """
     env = gym.make(env_id)
-    assert 'NoFrameskip' in env.spec.id
-    env = NoopResetEnv(env, noop_max=30)
+    # assert 'NoFrameskip' in env.spec.id
+    # env = NoopResetEnv(env, noop_max=30)
     env = MaxAndSkipEnv(env, skip=skip)
     if max_episode_steps is not None:
         env = TimeLimit(env, max_episode_steps=max_episode_steps)
     return env
-
-def make_env(env_id, seed, idx, capture_video, video_frequency, run_name):
-    def thunk():
-        env = gym.make(
-            env_id,
-            base_seed=seed + idx,
-            headless=True,
-            start_xvfb=False,
-            env_port=5555 + idx,
-            server_port=30000 + idx,
-        )
-        if capture_video:
-            if idx == 0:
-                env = gym.wrappers.RecordVideo(
-                    env,
-                    f"videos/{run_name}",
-                    lambda x: x % video_frequency == 0,
-                    name_prefix=f"env-{idx}",
-                    disable_logger=True,
-                )
-        env.action_space.seed(seed + idx)
-        env.observation_space.seed(seed + idx)
-        return env
-
-    return thunk
-=======
-    # TODO: change to minetest
-    return make_atari(env_id, skip, max_episode_steps)
-
-
->>>>>>> origin/minetest
 
 def set_seed(seed):
     # set seed
