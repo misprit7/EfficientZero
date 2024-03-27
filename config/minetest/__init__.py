@@ -143,7 +143,7 @@ class MinetestConfig(BaseConfig):
 
         if self.episode_life and not test:
             # env = EpisodicLifeEnv(env)
-            env = TimeLimit(env) # We don't have a lives system in the same was as Atari games, we want to use TimeLimit instead
+            env = TimeLimit(env, max_episode_steps=300) # We don't have a lives system in the same was as Atari games, we want to use TimeLimit instead
         env = WarpFrame(env, width=self.obs_shape[1], height=self.obs_shape[2], grayscale=self.gray_scale)
 
         if seed is not None:

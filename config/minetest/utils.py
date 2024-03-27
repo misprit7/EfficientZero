@@ -24,6 +24,7 @@ class PenalizeJumping(gym.Wrapper):
         if action["JUMP"]:
             penalty = -self.jump_penalty
         obs, rew, done, info = self.env.step(action)
+        rew *= 10 # TODO: Move this somewhere better
         rew += penalty
         return obs, rew, done, info
 

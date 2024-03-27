@@ -155,6 +155,8 @@ class MaxAndSkipEnv(gym.Wrapper):
         return self.env.reset(**kwargs)
 
     def render(self, mode='human', **kwargs):
+        if 'minetest' in self.env.unwrapped.spec.id:
+            return self.env.render()
         img = self.max_frame
         img = cv2.resize(img, (400, 400), interpolation=cv2.INTER_AREA).astype(np.uint8)
         if mode == 'rgb_array':
@@ -250,10 +252,19 @@ def make_minetest(env_id, skip=4, max_episode_steps=None, idx=0, xvfb=False):
     max_episode_steps: int
         max moves for an episode
     """
-    env = gym.make(env_id)
+    env = gym.make(
+        env_id,
+        world_seed=0, # TODO: Make adjustable
+        start_xvfb=False,
+        headless=(not xvfb),
+        env_port=5555 + idx,
+        server_port=30000 + idx,
+        # render_mode='rgb_array',
+        render_mode='human',
+    )
     # assert 'NoFrameskip' in env.spec.id
     # env = NoopResetEnv(env, noop_max=30)
-    env = MaxAndSkipEnv(env, skip=skip)
+    # env = MaxAndSkipEnv(env, skip=skip)
     if max_episode_steps is not None:
         env = TimeLimit(env, max_episode_steps=max_episode_steps)
     return env

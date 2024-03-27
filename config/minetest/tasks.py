@@ -33,7 +33,7 @@ def wrapped_treechop_env(**kwargs):
     env = SelectKeyActions(env, select_keys={"FORWARD", "JUMP"})
     # jumping usually interrupts progress towards
     # breaking nodes; apply penalty to learn faster
-    env = PenalizeJumping(env, 0.01)
+    env = PenalizeJumping(env, 1)
     # transform into pure discrete action space
     env = DictToMultiDiscreteActions(env)
     env = FlattenMultiDiscreteActions(env)

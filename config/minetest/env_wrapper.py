@@ -35,8 +35,10 @@ class MinetestWrapper(Game):
         return observation, reward, done, info
 
     def reset(self, **kwargs):
+        print('Starting minetest reset')
         observation = self.env.reset(**kwargs)
         observation = observation.astype(np.uint8)
+        print('Finished minetest reset')
 
         if self.cvt_string:
             observation = arr_to_str(observation)
