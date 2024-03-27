@@ -1,7 +1,7 @@
 import torch
 
 from core.config import BaseConfig
-from core.utils import make_minetest, WarpFrame, EpisodicLifeEnv
+from core.utils import make_minetest, WarpFrame, TimeLimit
 from core.dataset import Transforms
 from .env_wrapper import MinetestWrapper
 from .model import EfficientZeroNet
@@ -142,7 +142,8 @@ class MinetestConfig(BaseConfig):
             env = make_minetest(self.env_name, skip=self.frame_skip, max_episode_steps=self.max_moves, idx=idx, xvfb=self.xvfb)
 
         if self.episode_life and not test:
-            env = EpisodicLifeEnv(env)
+            # env = EpisodicLifeEnv(env)
+            env = TimeLimit(env) # We don't have a lives system in the same was as Atari games, we want to use TimeLimit instead
         env = WarpFrame(env, width=self.obs_shape[1], height=self.obs_shape[2], grayscale=self.gray_scale)
 
         if seed is not None:

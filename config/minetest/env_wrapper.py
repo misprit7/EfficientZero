@@ -46,20 +46,20 @@ class MinetestWrapper(Game):
     def close(self):
         self.env.close()
         
-def make_minetest(env_id, skip=4, max_episode_steps=None, idx=0, xvfb=False):
-    env = gym.make(
-        env_id,
-        world_seed=0, # TODO: Make adjustable
-        start_xvfb=False,
-        headless=(not xvfb), # TODO Make adjustable
-        env_port=5555 + idx,
-        server_port=30000 + idx,
-        render_mode='rgb_array',
-    )
-    # env = NoopResetEnv(env, noop_max=30)
-    env = MaxAndSkipEnv(env, skip=skip)
-    if max_episode_steps is not None:
-        env = TimeLimit(env, max_episode_steps=max_episode_steps)
-    return env
+# def make_minetest(env_id, skip=4, max_episode_steps=None, idx=0, xvfb=False):
+#     env = gym.make(
+#         env_id,
+#         world_seed=0, # TODO: Make adjustable
+#         start_xvfb=False,
+#         headless=(not xvfb), # TODO Make adjustable
+#         env_port=5555 + idx,
+#         server_port=30000 + idx,
+#         render_mode='rgb_array',
+#     )
+#     # env = NoopResetEnv(env, noop_max=30)
+#     env = MaxAndSkipEnv(env, skip=skip)
+#     if max_episode_steps is not None:
+#         env = TimeLimit(env, max_episode_steps=max_episode_steps)
+#     return env
 
 
