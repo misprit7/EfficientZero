@@ -103,6 +103,7 @@ class MinetestConfig(BaseConfig):
 
         game = self.new_game()
         self.action_space_size = game.action_space_size
+        game.close()
 
     def get_uniform_network(self):
         return EfficientZeroNet(
@@ -130,15 +131,15 @@ class MinetestConfig(BaseConfig):
             init_zero=self.init_zero,
             state_norm=self.state_norm)
 
-    def new_game(self, seed=None, save_video=False, save_path=None, video_callable=None, uid=None, test=False, final_test=False):
+    def new_game(self, seed=None, save_video=False, save_path=None, video_callable=None, uid=None, test=False, final_test=False, idx=0):
         if test:
             if final_test:
                 max_moves = 108000 // self.frame_skip
             else:
                 max_moves = self.test_max_moves
-            env = make_minetest(self.env_name, skip=self.frame_skip, max_episode_steps=max_moves)
+            env = make_minetest(self.env_name, skip=self.frame_skip, max_episode_steps=max_moves, idx=idx, xvfb=self.xvfb)
         else:
-            env = make_minetest(self.env_name, skip=self.frame_skip, max_episode_steps=self.max_moves)
+            env = make_minetest(self.env_name, skip=self.frame_skip, max_episode_steps=self.max_moves, idx=idx, xvfb=self.xvfb)
 
         if self.episode_life and not test:
             env = EpisodicLifeEnv(env)
@@ -146,6 +147,8 @@ class MinetestConfig(BaseConfig):
 
         if seed is not None:
             env.seed(seed)
+            env.action_space.seed(seed)
+            env.observation_space.seed(seed)
 
         if save_video:
             from gym.wrappers import Monitor

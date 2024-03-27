@@ -290,7 +290,7 @@ class BaseConfig(object):
     def set_game(self, env_name):
         raise NotImplementedError
 
-    def new_game(self, seed=None, save_video=False, save_path=None, video_callable=None, uid=None, test=False) -> Game:
+    def new_game(self, seed=None, save_video=False, save_path=None, video_callable=None, uid=None, test=False, idx=0) -> Game:
         """ returns a new instance of the game"""
         raise NotImplementedError
 
@@ -385,6 +385,8 @@ class BaseConfig(object):
         self.gpu_actor = args.gpu_actor
         self.p_mcts_num = args.p_mcts_num
         self.use_root_value = args.use_root_value
+
+        self.xvfb = args.xvfb
 
         if not self.do_consistency:
             self.consistency_coeff = 0

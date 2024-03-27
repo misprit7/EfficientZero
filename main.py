@@ -54,6 +54,9 @@ if __name__ == '__main__':
     parser.add_argument('--model_path', type=str, default='./results/test_model.p', help='load model path')
     parser.add_argument('--object_store_memory', type=int, default=150 * 1024 * 1024 * 1024, help='object store memory')
 
+    # Minetest specific
+    parser.add_argument('--xvfb', action='store_true', default=False, help='whether to start xvfb')
+
     # Process arguments
     args = parser.parse_args()
     args.device = 'cuda' if (not args.no_cuda) and torch.cuda.is_available() else 'cpu'

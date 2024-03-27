@@ -130,7 +130,7 @@ class AtariConfig(BaseConfig):
             init_zero=self.init_zero,
             state_norm=self.state_norm)
 
-    def new_game(self, seed=None, save_video=False, save_path=None, video_callable=None, uid=None, test=False, final_test=False):
+    def new_game(self, seed=None, save_video=False, save_path=None, video_callable=None, uid=None, test=False, final_test=False, idx=0):
         if test:
             if final_test:
                 max_moves = 108000 // self.frame_skip

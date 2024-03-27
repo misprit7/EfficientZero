@@ -10,3 +10,10 @@ __pycache__/
 # results dir
 /results
 /files
+
+artefacts/
+core/ctree/build/
+core/ctree/cytree.cpp
+core/ctree/*.so
+model.p
+
