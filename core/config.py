@@ -385,6 +385,9 @@ class BaseConfig(object):
         self.gpu_actor = args.gpu_actor
         self.p_mcts_num = args.p_mcts_num
         self.use_root_value = args.use_root_value
+        self.do_consistency = not args.do_consistency_off
+        self.use_value_prefix = not args.use_value_prefix_off
+        self.off_correction = not args.off_correction_off
 
         if not self.do_consistency:
             self.consistency_coeff = 0
