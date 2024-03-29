@@ -206,6 +206,7 @@ class WarpFrame(gym.ObservationWrapper):
         else:
             frame = obs[self._key]
 
+
         if self._grayscale:
             frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
         frame = cv2.resize(

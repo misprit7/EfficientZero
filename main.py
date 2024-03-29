@@ -7,6 +7,8 @@ import ray
 import torch
 from torch.utils.tensorboard import SummaryWriter
 
+import config.minetest.tasks
+
 from core.test import test
 from core.train import train
 from core.utils import init_logger, make_results_dir, set_seed
@@ -16,7 +18,7 @@ if __name__ == '__main__':
     parser.add_argument('--env', required=True, help='Name of the environment')
     parser.add_argument('--result_dir', default=os.path.join(os.getcwd(), 'results'),
                         help="Directory Path to store results (default: %(default)s)")
-    parser.add_argument('--case', required=True, choices=['atari'],
+    parser.add_argument('--case', required=True, choices=['atari', 'minetest'],
                         help="It's used for switching between different domains(default: %(default)s)")
     parser.add_argument('--opr', required=True, choices=['train', 'test'])
     parser.add_argument('--amp_type', required=True, choices=['torch_amp', 'none'],

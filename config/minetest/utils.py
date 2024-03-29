@@ -11,7 +11,7 @@ class AlwaysDig(gym.Wrapper):
     def step(self, action):
         action["DIG"] = True
         obs, rew, done, truncated, info = self.env.step(action)
-        return obs, rew, done, info
+        return obs, rew, done, truncated, info
 
 
 class PenalizeJumping(gym.Wrapper):
@@ -23,10 +23,10 @@ class PenalizeJumping(gym.Wrapper):
         penalty = 0
         if action["JUMP"]:
             penalty = -self.jump_penalty
-        obs, rew, done, info = self.env.step(action)
+        obs, rew, done, truncated, info = self.env.step(action)
         rew *= 10 # TODO: Move this somewhere better
         rew += penalty
-        return obs, rew, done, info
+        return obs, rew, done, truncated, info
 
 
 class FlattenMultiDiscreteActions(gym.Wrapper):
@@ -203,6 +203,25 @@ class DiscreteMouseAction(gym.Wrapper):
 
 class ToFloat32Reward(gym.Wrapper):
     def step(self, action):
-        obs, rew, done, info = self.env.step(action)
+        obs, rew, done, truncated, info = self.env.step(action)
         rew = np.float32(rew)
-        return obs, rew, done, info
+        return obs, rew, done, truncated, info
+
+# Converts gymnasium api to gym
+# Why isn't there a wrapper for this in gymnasium? Why did they change their api in the first place?
+# Some questions the universe doesn't have good answers for
+class Gymnasium2Gym(gym.Wrapper):
+    def __init__(self, env):
+        # env: gymnasium env
+        gym.Wrapper.__init__(self, env)
+
+    def step(self, action):
+        obs, reward, term, trunc, info = self.env.step(action)
+        done = term or trunc
+
+        return obs, reward, done, info # computes done
+
+    def reset(self, **kwargs):
+        obs, info = self.env.reset(**kwargs)
+        return obs # discard info
+

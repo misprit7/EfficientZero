@@ -371,6 +371,7 @@ class BaseConfig(object):
 
     def set_config(self, args):
         # reset config from the args
+        self.xvfb = args.xvfb
         self.set_game(args.env)
         self.case = args.case
         self.seed = args.seed
@@ -385,8 +386,6 @@ class BaseConfig(object):
         self.gpu_actor = args.gpu_actor
         self.p_mcts_num = args.p_mcts_num
         self.use_root_value = args.use_root_value
-
-        self.xvfb = args.xvfb
 
         if not self.do_consistency:
             self.consistency_coeff = 0

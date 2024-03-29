@@ -6,6 +6,7 @@ from core.dataset import Transforms
 from .env_wrapper import MinetestWrapper
 from .model import EfficientZeroNet
 
+import config.minetest.tasks
 
 class MinetestConfig(BaseConfig):
     def __init__(self):
@@ -15,12 +16,12 @@ class MinetestConfig(BaseConfig):
             test_interval=10000,
             log_interval=1000,
             vis_interval=1000,
-            test_episodes=32,
+            test_episodes=4,
             checkpoint_interval=100,
             target_model_interval=200,
             save_ckpt_interval=10000,
-            max_moves=12000,
-            test_max_moves=12000,
+            max_moves=500,
+            test_max_moves=1200,
             history_length=400,
             discount=0.997,
             dirichlet_alpha=0.3,
@@ -47,7 +48,7 @@ class MinetestConfig(BaseConfig):
             total_transitions=100 * 1000,
             transition_num=1,
             # frame skip & stack observation
-            frame_skip=4,
+            frame_skip=1,
             stacked_observations=4,
             # coefficient
             reward_loss_coeff=1,
@@ -134,20 +135,20 @@ class MinetestConfig(BaseConfig):
     def new_game(self, seed=None, save_video=False, save_path=None, video_callable=None, uid=None, test=False, final_test=False, idx=0):
         if test:
             if final_test:
-                max_moves = 108000 // self.frame_skip
+                max_moves = 1000 // self.frame_skip
             else:
                 max_moves = self.test_max_moves
             env = make_minetest(self.env_name, skip=self.frame_skip, max_episode_steps=max_moves, idx=idx, xvfb=self.xvfb)
         else:
             env = make_minetest(self.env_name, skip=self.frame_skip, max_episode_steps=self.max_moves, idx=idx, xvfb=self.xvfb)
 
-        if self.episode_life and not test:
+        # if self.episode_life and not test:
             # env = EpisodicLifeEnv(env)
-            env = TimeLimit(env, max_episode_steps=300) # We don't have a lives system in the same was as Atari games, we want to use TimeLimit instead
+        env = TimeLimit(env, max_episode_steps=1000) # We don't have a lives system in the same was as Atari games, we want to use TimeLimit instead
         env = WarpFrame(env, width=self.obs_shape[1], height=self.obs_shape[2], grayscale=self.gray_scale)
 
         if seed is not None:
-            env.seed(seed)
+            # env.seed(seed)
             env.action_space.seed(seed)
             env.observation_space.seed(seed)
 

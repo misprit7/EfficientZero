@@ -9,6 +9,7 @@ from config.minetest.utils import (
     PenalizeJumping,
     SelectKeyActions,
     ToFloat32Reward,
+    Gymnasium2Gym,
 )
 
 ## This module registers the minetest tasks
@@ -39,6 +40,8 @@ def wrapped_treechop_env(**kwargs):
     env = FlattenMultiDiscreteActions(env)
     # cast rewards to float32
     env = ToFloat32Reward(env)
+    # Switch to gym api
+    env = Gymnasium2Gym(env)
     return env
 
 

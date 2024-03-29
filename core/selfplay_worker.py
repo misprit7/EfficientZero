@@ -1,5 +1,6 @@
 import ray
 import time
+import subprocess
 import torch
 
 import numpy as np
@@ -108,6 +109,11 @@ class DataWorker(object):
         model.to(self.device)
         model.eval()
 
+        # time.sleep(3)
+        # Hacky, but makes sure no port errors
+        # subprocess.run(["pkill", "-9", "minetest"])
+        # time.sleep(0.5)
+
         start_training = False
         envs = [self.config.new_game(self.config.seed + (self.rank + 1) * i, idx=i) for i in range(env_nums)]
 
@@ -128,7 +134,8 @@ class DataWorker(object):
                     time.sleep(30)
                     break
 
-                init_obses = [env.reset() for env in envs]
+                print('Resetting selfplay envs')
+                init_obses = [(time.sleep(1), env.reset())[1] for env in envs]
                 dones = np.array([False for _ in range(env_nums)])
                 game_histories = [GameHistory(envs[_].env.action_space, max_length=self.config.history_length,
                                               config=self.config) for _ in range(env_nums)]

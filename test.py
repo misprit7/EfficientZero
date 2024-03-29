@@ -2,7 +2,9 @@ import config.minetest.tasks
 
 from core.utils import make_atari
 from core.utils import make_minetest
+from core.utils import WarpFrame, TimeLimit
 from gym import envs
+
 
 import time
 
@@ -10,9 +12,13 @@ if __name__ == "__main__":
     # print(envs.registry.all())
 
     envAtari = make_atari("BreakoutNoFrameskip-v4")
+    envAtari = WarpFrame(envAtari, width=96, height=96, grayscale=True)
     envAtari.reset()
 
     envMinetest = make_minetest("minetester-treechop_shaped-v0")
+    # print(envMinetest.reset())
+    envMinetest = WarpFrame(envMinetest, width=96, height=96, grayscale=True)
+    envMinetest = TimeLimit(envMinetest, max_episode_steps=50)
     envMinetest.reset()
 
     print('envs reset')
@@ -25,8 +31,6 @@ if __name__ == "__main__":
         print('obs shape:', obs.shape)
         print('reward:', rew)
         print('info:', info)
-        print('Length:', )
-        # breakpoint()
 
     step = 0
     render = False

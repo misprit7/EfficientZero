@@ -8,3 +8,6 @@ python main.py --env BreakoutNoFrameskip-v4 --case atari --opr test --seed 0 --n
   --amp_type 'torch_amp' \
   --model_path 'model.p' \
   --info 'Test'
+
+# python main.py --env minetester-treechop_shaped-v0 --case minetest --opr train --amp_type torch_amp --num_gpus 1 --num_cpus 10 --cpu_actor 8 --gpu_actor 4 --force --object_store_memory 16000000000
+
