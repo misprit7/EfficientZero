@@ -15,11 +15,20 @@ if __name__ == "__main__":
     envAtari = WarpFrame(envAtari, width=96, height=96, grayscale=True)
     envAtari.reset()
 
-    envMinetest = make_minetest("minetester-treechop_shaped-v0")
-    # print(envMinetest.reset())
-    envMinetest = WarpFrame(envMinetest, width=96, height=96, grayscale=True)
-    envMinetest = TimeLimit(envMinetest, max_episode_steps=50)
-    envMinetest.reset()
+    for i in range(5):
+        print('starting minetest')
+        envMinetest = make_minetest(
+            "minetester-treechop_shaped-v0",
+            idx=i
+        )
+        envMinetest = WarpFrame(envMinetest, width=96, height=96, grayscale=True)
+        envMinetest = TimeLimit(envMinetest, max_episode_steps=10)
+        print('resetting')
+        envMinetest.reset()
+        print('stepping')
+        envMinetest.step(4)
+        # breakpoint()
+        # envMinetest.close()
 
     print('envs reset')
 

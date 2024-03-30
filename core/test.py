@@ -82,6 +82,7 @@ def test(config, model, counter, test_episodes, device, render, save_video=False
         if use_pb:
             pb = tqdm(np.arange(max_episode_steps), leave=True)
         # initializations
+        print('Resetting test envs')
         init_obses = [env.reset() for env in envs]
         dones = np.array([False for _ in range(test_episodes)])
         game_histories = [GameHistory(envs[_].env.action_space, max_length=max_episode_steps, config=config) for _ in range(test_episodes)]

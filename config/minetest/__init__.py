@@ -13,7 +13,7 @@ class MinetestConfig(BaseConfig):
         super(MinetestConfig, self).__init__(
             training_steps=100000,
             last_steps=20000,
-            test_interval=10000,
+            test_interval=5000,
             log_interval=1000,
             vis_interval=1000,
             test_episodes=4,
@@ -102,7 +102,7 @@ class MinetestConfig(BaseConfig):
         obs_shape = (self.image_channel, 96, 96)
         self.obs_shape = (obs_shape[0] * self.stacked_observations, obs_shape[1], obs_shape[2])
 
-        game = self.new_game()
+        game = self.new_game(idx=150)
         self.action_space_size = game.action_space_size
         game.close()
 
