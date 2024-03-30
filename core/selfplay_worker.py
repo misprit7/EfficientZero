@@ -240,7 +240,7 @@ class DataWorker(object):
                             self.free()
 
                             # reset the finished env and new a env
-                            # envs[i].close()
+                            envs[i].close()
                             init_obs = envs[i].reset()
                             game_histories[i] = GameHistory(env.env.action_space, max_length=self.config.history_length,
                                                             config=self.config)
@@ -351,7 +351,7 @@ class DataWorker(object):
 
                 for i in range(env_nums):
                     env = envs[i]
-                    # env.close()
+                    env.close()
 
                     if dones[i]:
                         # pad over last block trajectory

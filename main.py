@@ -1,11 +1,13 @@
 import argparse
 import logging.config
 import os
+import subprocess
 
 import numpy as np
 import ray
 import torch
 from torch.utils.tensorboard import SummaryWriter
+import wandb
 
 import config.minetest.tasks
 
@@ -78,6 +80,7 @@ if __name__ == '__main__':
     if args.case == 'atari':
         from config.atari import game_config
     elif args.case == 'minetest':
+        subprocess.run(["pkill", "-9", "minetest"])
         from config.minetest import game_config
     else:
         raise Exception('Invalid --case option')
@@ -94,6 +97,7 @@ if __name__ == '__main__':
     device = game_config.device
     try:
         if args.opr == 'train':
+            wandb.init(project="E0", entity="minetest", sync_tensorboard=True)
             summary_writer = SummaryWriter(exp_path, flush_secs=10)
             if args.load_model and os.path.exists(args.model_path):
                 model_path = args.model_path

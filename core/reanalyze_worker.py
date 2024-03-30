@@ -1,6 +1,7 @@
 import ray
 import time
 import torch
+import traceback
 
 import numpy as np
 import core.ctree.cytree as cytree
@@ -69,7 +70,7 @@ class BatchWorker_CPU(object):
             # off-policy correction: shorter horizon of td steps
             delta_td = (total_transitions - idx) // config.auto_td_steps
             td_steps = config.td_steps - delta_td
-            td_steps = np.clip(td_steps, 1, 5).astype(np.int)
+            td_steps = np.clip(td_steps, 1, 5).astype(np.int32)
 
             # prepare the corresponding observations for bootstrapped values o_{t+k}
             game_obs = game.obs(state_index + td_steps, config.num_unroll_steps)
@@ -258,9 +259,10 @@ class BatchWorker_CPU(object):
                 # Observation will be deleted if replay buffer is full. (They are stored in the ray object store)
                 try:
                     self.make_batch(batch_context, self.config.revisit_policy_search_rate, weights=target_weights)
-                except:
+                except Exception:
+                    print(traceback.format_exc())
                     print('Data is deleted...')
-                    time.sleep(0.1)
+                    time.sleep(5)
 
 
 @ray.remote(num_gpus=0.125)
@@ -308,7 +310,7 @@ class BatchWorker_GPU(object):
             value_obs_lst = prepare_observation_lst(value_obs_lst)
             # split a full batch into slices of mini_infer_size: to save the GPU memory for more GPU actors
             m_batch = self.config.mini_infer_size
-            slices = np.ceil(batch_size / m_batch).astype(np.int_)
+            slices = np.ceil(batch_size / m_batch).astype(np.int32)
             network_output = []
             for i in range(slices):
                 beg_index = m_batch * i
@@ -399,7 +401,7 @@ class BatchWorker_GPU(object):
             policy_obs_lst = prepare_observation_lst(policy_obs_lst)
             # split a full batch into slices of mini_infer_size: to save the GPU memory for more GPU actors
             m_batch = self.config.mini_infer_size
-            slices = np.ceil(batch_size / m_batch).astype(np.int_)
+            slices = np.ceil(batch_size / m_batch).astype(np.int32)
             network_output = []
             for i in range(slices):
                 beg_index = m_batch * i

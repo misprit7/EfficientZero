@@ -2,7 +2,6 @@ from typing import List, Set
 
 import gymnasium as gym
 import numpy as np
-from minetester.minetest_env import Minetest
 from minetester.utils import KEY_MAP, NOOP_ACTION
 
 ## A util module for minetest environments
