@@ -242,7 +242,7 @@ def make_atari(env_id, skip=4, max_episode_steps=None):
         env = TimeLimit(env, max_episode_steps=max_episode_steps)
     return env
 
-def make_minetest(env_id, skip=4, max_episode_steps=None, idx=0, xvfb=False):
+def make_minetest(env_id, skip=4, max_episode_steps=None, idx=0, xvfb=False, world_dir = None, config_path = None):
     """Make Minetest game
     Parameters
     ----------
@@ -262,6 +262,8 @@ def make_minetest(env_id, skip=4, max_episode_steps=None, idx=0, xvfb=False):
         server_port=30000 + idx,
         # render_mode='rgb_array',
         render_mode='human',
+        world_dir = world_dir,
+        config_path = config_path
     )
     # assert 'NoFrameskip' in env.spec.id
     # env = NoopResetEnv(env, noop_max=30)

@@ -82,6 +82,11 @@ if __name__ == '__main__':
     elif args.case == 'minetest':
         subprocess.run(["pkill", "-9", "minetest"])
         from config.minetest import game_config
+    elif args.case == 'minetest-probe-envs':
+        subprocess.run(["pkill", "-9", "minetest"])
+        subprocess.call("./config/minetest/worlds/CopyWorld.sh")
+
+        from config.minetest import game_config_probe_env as game_config
     else:
         raise Exception('Invalid --case option')
 
@@ -142,5 +147,9 @@ if __name__ == '__main__':
         else:
             raise Exception('Please select a valid operation(--opr) to be performed')
         ray.shutdown()
+
+        if args.case == 'minetest-probe-envs':
+            subprocess.call("./config/minetest/worlds/CleanWorlds.sh")
+
     except Exception as e:
         logging.getLogger('root').error(e, exc_info=True)

@@ -9,7 +9,7 @@ from .model import EfficientZeroNet
 import config.minetest.tasks
 
 class MinetestConfig(BaseConfig):
-    def __init__(self):
+    def __init__(self, world_dir = None, config_path = None):
         super(MinetestConfig, self).__init__(
             training_steps=100000,
             last_steps=20000,
@@ -83,6 +83,9 @@ class MinetestConfig(BaseConfig):
         self.resnet_fc_policy_layers = [32]  # Define the hidden layers in the policy head of the prediction network
         self.downsample = True  # Downsample observations before representation network (See paper appendix Network Architecture)
 
+        self.world_dir = world_dir
+        self.config_path = config_path
+
     def visit_softmax_temperature_fn(self, num_moves, trained_steps):
         if self.change_temperature:
             if trained_steps < 0.5 * (self.training_steps):
@@ -138,9 +141,9 @@ class MinetestConfig(BaseConfig):
                 max_moves = 1000 // self.frame_skip
             else:
                 max_moves = self.test_max_moves
-            env = make_minetest(self.env_name, skip=self.frame_skip, max_episode_steps=max_moves, idx=idx, xvfb=self.xvfb)
+            env = make_minetest(self.env_name, skip=self.frame_skip, max_episode_steps=max_moves, idx=idx, xvfb=self.xvfb, world_dir = self.world_dir, config_path = self.config_path)
         else:
-            env = make_minetest(self.env_name, skip=self.frame_skip, max_episode_steps=self.max_moves, idx=idx, xvfb=self.xvfb)
+            env = make_minetest(self.env_name, skip=self.frame_skip, max_episode_steps=self.max_moves, idx=idx, xvfb=self.xvfb, world_dir = self.world_dir, config_path = self.config_path)
 
         # if self.episode_life and not test:
             # env = EpisodicLifeEnv(env)
@@ -172,3 +175,4 @@ class MinetestConfig(BaseConfig):
 
 
 game_config = MinetestConfig()
+game_config_probe_env = MinetestConfig(world_dir = "./worlds/ToCopy", config_path = "./worlds/minetest.conf")
