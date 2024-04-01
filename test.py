@@ -24,9 +24,11 @@ if __name__ == "__main__":
         idx=30,
         #xvfb=True,
     )
+    envMinetest.action_space.seed(0)
+    envMinetest.observation_space.seed(0)
     envMinetest = WarpFrame(envMinetest, width=96, height=96, grayscale=True)
     envMinetest = TimeLimit(envMinetest, max_episode_steps=10)
-    envMinetest = Monitor(envMinetest, directory='recordings', force=True, video_callable=lambda _: True, uid=0)
+    #envMinetest = Monitor(envMinetest, directory='recordings', force=True, video_callable=lambda _: True, uid=0)
     envMinetest.reset()
 
     print('envs reset')
@@ -50,7 +52,7 @@ if __name__ == "__main__":
             actionMinetest = envMinetest.action_space.sample()
             observation, reward, doneMinetest, info = envMinetest.step(actionMinetest)
             if render:
-                #envAtari.render()
+                envAtari.render()
                 envMinetest.render()
             if doneAtari:
                 print('done atari')
