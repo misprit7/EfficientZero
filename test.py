@@ -4,31 +4,30 @@ from core.utils import make_atari
 from core.utils import make_minetest
 from core.utils import WarpFrame, TimeLimit
 from gym import envs
+from gym.wrappers import Monitor
+
+from minetester.utils import start_xserver
 
 
 import time
 
 if __name__ == "__main__":
     # print(envs.registry.all())
+    #start_xserver(0)
 
     envAtari = make_atari("BreakoutNoFrameskip-v4")
     envAtari = WarpFrame(envAtari, width=96, height=96, grayscale=True)
     envAtari.reset()
 
-    for i in range(5):
-        print('starting minetest')
-        envMinetest = make_minetest(
-            "minetester-treechop_shaped-v0",
-            idx=i
-        )
-        envMinetest = WarpFrame(envMinetest, width=96, height=96, grayscale=True)
-        envMinetest = TimeLimit(envMinetest, max_episode_steps=10)
-        print('resetting')
-        envMinetest.reset()
-        print('stepping')
-        envMinetest.step(4)
-        # breakpoint()
-        # envMinetest.close()
+    envMinetest = make_minetest(
+        "minetester-treechop_shaped-v0",
+        idx=30,
+        #xvfb=True,
+    )
+    envMinetest = WarpFrame(envMinetest, width=96, height=96, grayscale=True)
+    envMinetest = TimeLimit(envMinetest, max_episode_steps=10)
+    envMinetest = Monitor(envMinetest, directory='recordings', force=True, video_callable=lambda _: True, uid=0)
+    envMinetest.reset()
 
     print('envs reset')
 
@@ -42,7 +41,7 @@ if __name__ == "__main__":
         print('info:', info)
 
     step = 0
-    render = False
+    render = True
     
     while True:
         try:
@@ -51,7 +50,7 @@ if __name__ == "__main__":
             actionMinetest = envMinetest.action_space.sample()
             observation, reward, doneMinetest, info = envMinetest.step(actionMinetest)
             if render:
-                envAtari.render()
+                #envAtari.render()
                 envMinetest.render()
             if doneAtari:
                 print('done atari')

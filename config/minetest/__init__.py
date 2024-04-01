@@ -13,10 +13,10 @@ class MinetestConfig(BaseConfig):
         super(MinetestConfig, self).__init__(
             training_steps=100000,
             last_steps=20000,
-            test_interval=5000,
+            test_interval=2000,
             log_interval=1000,
             vis_interval=1000,
-            test_episodes=4,
+            test_episodes=10,
             checkpoint_interval=100,
             target_model_interval=200,
             save_ckpt_interval=10000,

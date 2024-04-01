@@ -253,6 +253,7 @@ def make_minetest(env_id, skip=4, max_episode_steps=None, idx=0, xvfb=False):
     max_episode_steps: int
         max moves for an episode
     """
+    idx += 250
     env = gym.make(
         env_id,
         world_seed=0, # TODO: Make adjustable

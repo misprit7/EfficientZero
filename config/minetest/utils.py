@@ -223,4 +223,7 @@ class Gymnasium2Gym(gym.Wrapper):
     def reset(self, **kwargs):
         obs, info = self.env.reset(**kwargs)
         return obs # discard info
+    
+    def render(self, mode, **kwargs):
+        return self.env.render(**kwargs)
 
