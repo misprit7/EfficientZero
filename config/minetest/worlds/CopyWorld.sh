@@ -2,8 +2,8 @@
 
 echo "hello world"
 
-rm -r worlds/ToCopy
-mkdir worlds/ToCopy
+rm -r ./config/minetest/worlds/ToCopy
+mkdir ./config/minetest/worlds/ToCopy
 
 if [[ -z $@ ]]; then
    num=5
@@ -16,8 +16,9 @@ echo $num
 for ((i = 0 ; i < $num ; i++ ))
 do
    #echo "Welcome $i times"
-   cp -r worlds/World_Train worlds/ToCopy 
-   mv worlds/ToCopy/World_Train worlds/ToCopy/$i
+   cp -r ./config/minetest/worlds/World_Train ./config/minetest/worlds/ToCopy 
+   mv ./config/minetest/worlds/ToCopy/World_Train ./config/minetest/worlds/ToCopy/$i
+   chmod go+w ./config/minetest/worlds/ToCopy/$i
 
 done
 

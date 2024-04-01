@@ -1,5 +1,5 @@
 #!/bin/bash
 
-rm -r worlds/ToCopy
+rm -r ./config/minetest/worlds/ToCopy
 
 echo "Cleaned"

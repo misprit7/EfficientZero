@@ -175,4 +175,4 @@ class MinetestConfig(BaseConfig):
 
 
 game_config = MinetestConfig()
-game_config_probe_env = MinetestConfig(world_dir = "./config/minetest/worlds/ToCopy", config_path = "./config/minetest/worlds/minetest.conf")
+game_config_probe_env = MinetestConfig(world_dir = "./config/minetest/worlds/ToCopy/0", config_path = "./config/minetest/worlds/minetest.conf")

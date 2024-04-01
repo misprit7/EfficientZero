@@ -84,7 +84,7 @@ if __name__ == '__main__':
         from config.minetest import game_config
     elif args.case == 'minetest-probe-envs':
         subprocess.run(["pkill", "-9", "minetest"])
-        subprocess.run(["sudo", "./config/minetest/worlds/CopyWorld.sh"])
+        subprocess.run(["sudo", "bash", "./config/minetest/worlds/CopyWorld.sh"])
 
         from config.minetest import game_config_probe_env as game_config
     else:
@@ -152,4 +152,6 @@ if __name__ == '__main__':
             subprocess.run(["sudo", "./config/minetest/worlds/CleanWorlds.sh"])
 
     except Exception as e:
+        if args.case == 'minetest-probe-envs':
+            subprocess.run(["sudo", "bash", "./config/minetest/worlds/CleanWorlds.sh"])
         logging.getLogger('root').error(e, exc_info=True)
