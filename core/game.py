@@ -26,7 +26,7 @@ class Game:
         self.env.close(*args, **kwargs)
 
     def render(self, *args, **kwargs):
-        self.env.render(*args, **kwargs)
+        return self.env.render(*args, **kwargs)
 
 
 class GameHistory:
