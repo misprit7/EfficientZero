@@ -31,10 +31,11 @@ def wrapped_treechop_env(**kwargs):
     # make breaking blocks easier to learn
     env = AlwaysDig(env)
     # only allow basic movements
-    env = SelectKeyActions(env, select_keys={"FORWARD", "JUMP"})
+    # env = SelectKeyActions(env, select_keys={"FORWARD", "JUMP"})
+    env = SelectKeyActions(env, select_keys={"FORWARD"})
     # jumping usually interrupts progress towards
     # breaking nodes; apply penalty to learn faster
-    env = PenalizeJumping(env, 1)
+    #env = PenalizeJumping(env, 0.2)
     # transform into pure discrete action space
     env = DictToMultiDiscreteActions(env)
     env = FlattenMultiDiscreteActions(env)

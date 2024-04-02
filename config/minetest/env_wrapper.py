@@ -5,6 +5,7 @@ import gym
 
 
 class MinetestWrapper(Game):
+    total_reward = 0
     def __init__(self, env, discount: float, cvt_string=True):
         """Minetest Wrapper
         Parameters
@@ -31,6 +32,7 @@ class MinetestWrapper(Game):
 
         if self.cvt_string:
             observation = arr_to_str(observation)
+        self.total_reward += reward
 
         return observation, reward, done, info
 
@@ -38,7 +40,8 @@ class MinetestWrapper(Game):
         print('Starting minetest reset')
         observation = self.env.reset(**kwargs)
         observation = observation.astype(np.uint8)
-        print('Finished minetest reset')
+        print(f'Finished minetest reset: {self.total_reward}')
+        self.total_reward = 0
 
         if self.cvt_string:
             observation = arr_to_str(observation)

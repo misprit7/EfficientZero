@@ -23,7 +23,6 @@ class PenalizeJumping(gym.Wrapper):
         if action["JUMP"]:
             penalty = -self.jump_penalty
         obs, rew, done, truncated, info = self.env.step(action)
-        rew *= 10 # TODO: Move this somewhere better
         rew += penalty
         return obs, rew, done, truncated, info
 
@@ -218,6 +217,7 @@ class Gymnasium2Gym(gym.Wrapper):
         obs, reward, term, trunc, info = self.env.step(action)
         done = term or trunc
 
+        reward *= 100 # TODO: Move this somewhere better
         return obs, reward, done, info # computes done
 
     def reset(self, **kwargs):
