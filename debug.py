@@ -11,7 +11,7 @@ from core.utils import WarpFrame, TimeLimit
 env = make_minetest(
     "minetester-treechop_shaped-v0",
     idx=30,
-    save_video=True
+    save_video=False
     #xvfb=True,
 )
 env = WarpFrame(env, width=96, height=96, grayscale=True)
@@ -49,7 +49,7 @@ while True:
 
     obs, r, done, info = env.step(c)
     print('r: ', r)
-    print(env.render().shape)
+    env.render()
     # plt.imshow(obs)
     # plt.show()
 

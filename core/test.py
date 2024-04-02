@@ -79,7 +79,7 @@ def test(config, model, counter, test_episodes, device, render, save_video=False
         # new games
         envs = [config.new_game(seed=i, save_video=save_video, save_path=save_path, test=True, final_test=final_test,
                               video_callable=lambda episode_id: True, uid=i, idx=100+i) for i in range(test_episodes)]
-        frames = [[]]*test_episodes;
+        frames = [[] for _ in range(test_episodes)]
         max_episode_steps = envs[0].get_max_episode_steps()
         if use_pb:
             pb = tqdm(np.arange(max_episode_steps), leave=True)
@@ -149,9 +149,10 @@ def test(config, model, counter, test_episodes, device, render, save_video=False
 
             step += 1
             if use_pb:
-                pb.set_description('{} In step {}, scores: {}(max: {}, min: {}) currently.'
+                pb.set_description('{} In step {}, scores: {}(max: {} with index {}, min: {}) currently.'
                                    ''.format(config.env_name, counter,
-                                             ep_ori_rewards.mean(), ep_ori_rewards.max(), ep_ori_rewards.min()))
+                                             ep_ori_rewards.mean(), ep_ori_rewards.max(), ep_ori_rewards.argmax(), ep_ori_rewards.min()))
+        
                 pb.update(1)
 
         for env in envs:
