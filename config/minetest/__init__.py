@@ -20,8 +20,8 @@ class MinetestConfig(BaseConfig):
             checkpoint_interval=100,
             target_model_interval=200,
             save_ckpt_interval=10000,
-            max_moves=1000,
-            test_max_moves=1000,
+            max_moves=300,
+            test_max_moves=300,
             history_length=400,
             discount=0.997,
             dirichlet_alpha=0.3,
@@ -106,6 +106,12 @@ class MinetestConfig(BaseConfig):
         self.action_space_size = game.action_space_size
         game.close()
 
+    def set_obs_space(self):
+        if self.gray_scale:
+            self.image_channel = 1
+        obs_shape = (self.image_channel, 96, 96)
+        self.obs_shape = (obs_shape[0] * self.stacked_observations, obs_shape[1], obs_shape[2])
+
     def get_uniform_network(self):
         return EfficientZeroNet(
             self.obs_shape,
@@ -135,7 +141,7 @@ class MinetestConfig(BaseConfig):
     def new_game(self, seed=None, save_video=False, save_path=None, video_callable=None, uid=None, test=False, final_test=False, idx=0):
         if test:
             if final_test:
-                max_moves = 1000 // self.frame_skip
+                max_moves = 300 // self.frame_skip
             else:
                 max_moves = self.test_max_moves
             env = make_minetest(self.env_name, skip=self.frame_skip, max_episode_steps=max_moves, idx=idx, xvfb=self.xvfb, save_video=save_video)

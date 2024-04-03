@@ -150,6 +150,9 @@ class ReplayBuffer(object):
         self.base_idx += num_excess_games
 
         self.clear_time = time.time()
+    
+    def populate_sample_games(self, sample_path):
+        return
 
     def clear_buffer(self):
         del self.buffer[:]

@@ -60,10 +60,12 @@ if __name__ == '__main__':
     parser.add_argument('--do-consistency-off', action="store_false", default=True, help='Turn off self-supervised consistency loss')
     parser.add_argument('--use-value-prefix-off', action="store_false", default=True, help='Turn off end-to-end prediction of value prefix')
     parser.add_argument('--off-correction-off', action="store_false", default=True, help='Turn off model-based off-policy correction')
+    parser.add_argument('--use_saved_games', action="store_true", default=False, help="Load saved games to pre-populate the Replay Buffer")
 
 
     # Minetest specific
     parser.add_argument('--xvfb', action='store_true', default=False, help='whether to start xvfb')
+    parser.add_argument('--saved_games_path', type=str, default='./saved_minetest_games/', help="path containing saved games")
 
     # Process arguments
     args = parser.parse_args()
@@ -93,7 +95,7 @@ if __name__ == '__main__':
     exp_path = game_config.set_config(args)
     exp_path, log_base_path = make_results_dir(exp_path, args)
 
-    # set-up logger
+    # set-up loggerH
     init_logger(log_base_path)
     logging.getLogger('train').info('Path: {}'.format(exp_path))
     logging.getLogger('train').info('Param: {}'.format(game_config.get_hparams()))
