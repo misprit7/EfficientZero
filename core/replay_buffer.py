@@ -162,13 +162,42 @@ class ReplayBuffer(object):
             file_path = os.path.join(games_directory, game)
             with open(file_path, "rb") as f:
                 loaded_trajectory = pickle.load(f)
-                loaded_trajectory.game_over()
+                #loaded_trajectory.game_over()
                 loaded_trajectories.append(loaded_trajectory)
-            self.save_game(loaded_trajectory, end_tag=True, gap_steps=self.config.num_unroll_steps + self.config.td_steps)
+            #self.save_game(loaded_trajectory, end_tag=True, gap_steps=self.config.num_unroll_steps + self.config.td_steps)
+        print("Num samples: ", len(loaded_trajectories))
+        for i in range(len(loaded_trajectories)-1):
+            self.save_loaded_trajectories(loaded_trajectories[i], loaded_trajectories[i+1])
+        
         print("Pre-populated saved games")
         print("Games in Buffer: ", len(self.buffer))
         print("Steps in Buffer: ", self.get_total_len())
         self.num_sample_games = self.size()
+        return
+    
+    def save_loaded_trajectories(self, last_game_histories, game_histories):
+        beg_index = self.config.stacked_observations
+        end_index = beg_index + self.config.num_unroll_steps
+
+        pad_obs_lst = game_histories.obs_history[beg_index:end_index]
+        #pad_child_visits_lst = game_histories.child_visits[beg_index:end_index]
+        pad_child_visits_lst = []
+
+        beg_index = 0
+        end_index = beg_index + self.config.num_unroll_steps + self.config.td_steps - 1
+
+        pad_reward_lst = game_histories.rewards[beg_index:end_index]
+
+        beg_index = 0
+        end_index = beg_index + self.config.num_unroll_steps + self.config.td_steps
+
+        #pad_root_values_lst = game_histories[i].root_values[beg_index:end_index]
+        pad_root_values_lst = []
+        # pad over and save
+        last_game_histories.pad_over(pad_obs_lst, pad_reward_lst, pad_root_values_lst, pad_child_visits_lst)
+        last_game_histories.game_over()
+        print("!!!!!!!!!!!!!!! PADDED !!!!!!!!!!!!!!!!!!!!!!!")
+        self.save_game(last_game_histories, end_tag=True, gap_steps=self.config.num_unroll_steps + self.config.td_steps)
         return
 
     def clear_buffer(self):
