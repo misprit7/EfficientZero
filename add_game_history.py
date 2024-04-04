@@ -45,6 +45,8 @@ minetest.env.render()
 
 step = 0
 total_reward = 0
+total_rewards = []
+policy_targets = []
 while True:
     s = input()
     c = 4
@@ -76,6 +78,8 @@ while True:
 
     obs, r, done, info = minetest.step(c)
     trajectory.append(c, obs, r)
+    policy_target = np.eye(1, trajectory.action_space_size, c)[0]
+    policy_targets.append(policy_target.astype(int).tolist())
     print(step)
     print('r: ', r)
     minetest.env.render()
@@ -83,20 +87,20 @@ while True:
     # plt.show()
     step+=1
     total_reward += r
+    total_rewards.append(total_reward)
 
 minetest.close()
 
-file_name = f"trajectory_step_{step}_reward_{total_reward}.pkl"
+shifted_rewards = np.concatenate(([0], total_rewards[:-1]))
+target_values = total_rewards + game_config.discount * shifted_rewards
+
+for i in range(trajectory.__len__()):
+    trajectory.store_search_stats(policy_targets[i], target_values[i])
+
+file_name = f"trajectory_step_{step}_reward_{total_rewards[-1]}.pkl"
 
 print(trajectory.__len__())
 file_path = os.path.join(save_directory, file_name)
 
 with open(file_path, "wb") as f:
     pickle.dump(trajectory, f)
-
-
-# print("retrieving file")
-# with open(file_path, "rb") as f:
-#     loaded_trajectory = pickle.load(f)
-
-# print(type(loaded_trajectory))
