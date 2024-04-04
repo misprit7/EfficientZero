@@ -65,7 +65,7 @@ if __name__ == '__main__':
 
     # Minetest specific
     parser.add_argument('--xvfb', action='store_true', default=False, help='whether to start xvfb')
-    parser.add_argument('--saved_games_path', type=str, default='./saved_minetest_games/', help="path containing saved games")
+    parser.add_argument('--saved_games_path', type=str, default='saved_minetest_games/', help="path containing saved games")
 
     # Process arguments
     args = parser.parse_args()
@@ -103,7 +103,7 @@ if __name__ == '__main__':
     device = game_config.device
     try:
         if args.opr == 'train':
-            wandb.init(project="E0", entity="minetest", sync_tensorboard=True)
+            #wandb.init(project="E0", entity="minetest", sync_tensorboard=True)
             summary_writer = SummaryWriter(exp_path, flush_secs=10)
             if args.load_model and os.path.exists(args.model_path):
                 model_path = args.model_path

@@ -2,7 +2,8 @@ import ray
 import time
 
 import numpy as np
-
+import os
+import pickle
 
 @ray.remote
 class ReplayBuffer(object):
@@ -26,6 +27,7 @@ class ReplayBuffer(object):
         self._alpha = config.priority_prob_alpha
         self.transition_top = int(config.transition_num * 10 ** 6)
         self.clear_time = 0
+        self.num_sample_games = 0
 
     def save_pools(self, pools, gap_step):
         # save a list of game histories
@@ -152,6 +154,21 @@ class ReplayBuffer(object):
         self.clear_time = time.time()
     
     def populate_sample_games(self, sample_path):
+        games_directory = os.path.join(os.getcwd(), sample_path)
+        games = os.listdir(games_directory)
+
+        loaded_trajectories = []
+        for game in games:
+            file_path = os.path.join(games_directory, game)
+            with open(file_path, "rb") as f:
+                loaded_trajectory = pickle.load(f)
+                loaded_trajectory.game_over()
+                loaded_trajectories.append(loaded_trajectory)
+            self.save_game(loaded_trajectory, end_tag=True, gap_steps=self.config.num_unroll_steps + self.config.td_steps)
+        print("Pre-populated saved games")
+        print("Games in Buffer: ", len(self.buffer))
+        print("Steps in Buffer: ", self.get_total_len())
+        self.num_sample_games = self.size()
         return
 
     def clear_buffer(self):
