@@ -34,7 +34,7 @@ game_config.set_obs_space()
 
 print(game_config.obs_shape)
 
-trajectory = GameHistory(env.action_space, max_length= 1000, config=game_config)
+trajectory = GameHistory(env.action_space, max_length= game_config.history_length, config=game_config)
 
 
 # for _ in range(12):
