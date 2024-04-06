@@ -6,6 +6,7 @@ import torch
 import numpy as np
 import core.ctree.cytree as cytree
 
+import imageio
 from tqdm.auto import tqdm
 from torch.cuda.amp import autocast as autocast
 from core.mcts import MCTS
@@ -78,6 +79,7 @@ def test(config, model, counter, test_episodes, device, render, save_video=False
         # new games
         envs = [config.new_game(seed=i, save_video=save_video, save_path=save_path, test=True, final_test=final_test,
                               video_callable=lambda episode_id: True, uid=i, idx=100+i) for i in range(test_episodes)]
+        frames = [[] for _ in range(test_episodes)]
         max_episode_steps = envs[0].get_max_episode_steps()
         if use_pb:
             pb = tqdm(np.arange(max_episode_steps), leave=True)
@@ -94,9 +96,11 @@ def test(config, model, counter, test_episodes, device, render, save_video=False
         ep_clip_rewards = np.zeros(test_episodes)
         # loop
         while not dones.all():
-            if render:
+            if render or save_video:
                 for i in range(test_episodes):
-                    envs[i].render()
+                    frame = envs[i].render()
+                    if save_video:
+                        frames[i].append(frame)
 
             if config.image_based:
                 stack_obs = []
@@ -145,12 +149,18 @@ def test(config, model, counter, test_episodes, device, render, save_video=False
 
             step += 1
             if use_pb:
-                pb.set_description('{} In step {}, scores: {}(max: {}, min: {}) currently.'
+                pb.set_description('{} In step {}, scores: {}(max: {} with index {}, min: {}) currently.'
                                    ''.format(config.env_name, counter,
-                                             ep_ori_rewards.mean(), ep_ori_rewards.max(), ep_ori_rewards.min()))
+                                             ep_ori_rewards.mean(), ep_ori_rewards.max(), ep_ori_rewards.argmax(), ep_ori_rewards.min()))
+        
                 pb.update(1)
 
         for env in envs:
             env.close()
+
+        for i in range(test_episodes):
+            with imageio.get_writer(f'{save_path}/test_{i}.mp4', fps=5) as video:
+                for frame in frames[i]:
+                    video.append_data(frame)
 
     return ep_ori_rewards, step, save_path

@@ -20,8 +20,8 @@ class MinetestConfig(BaseConfig):
             checkpoint_interval=100,
             target_model_interval=200,
             save_ckpt_interval=10000,
-            max_moves=500,
-            test_max_moves=1200,
+            max_moves=1000,
+            test_max_moves=1000,
             history_length=400,
             discount=0.997,
             dirichlet_alpha=0.3,
@@ -138,13 +138,13 @@ class MinetestConfig(BaseConfig):
                 max_moves = 1000 // self.frame_skip
             else:
                 max_moves = self.test_max_moves
-            env = make_minetest(self.env_name, skip=self.frame_skip, max_episode_steps=max_moves, idx=idx, xvfb=self.xvfb)
+            env = make_minetest(self.env_name, skip=self.frame_skip, max_episode_steps=max_moves, idx=idx, xvfb=self.xvfb, save_video=save_video)
         else:
-            env = make_minetest(self.env_name, skip=self.frame_skip, max_episode_steps=self.max_moves, idx=idx, xvfb=self.xvfb)
+            env = make_minetest(self.env_name, skip=self.frame_skip, max_episode_steps=self.max_moves, idx=idx, xvfb=self.xvfb, save_video=save_video)
 
         # if self.episode_life and not test:
             # env = EpisodicLifeEnv(env)
-        env = TimeLimit(env, max_episode_steps=1000) # We don't have a lives system in the same was as Atari games, we want to use TimeLimit instead
+        # env = TimeLimit(env, max_episode_steps=2000) # We don't have a lives system in the same was as Atari games, we want to use TimeLimit instead
         env = WarpFrame(env, width=self.obs_shape[1], height=self.obs_shape[2], grayscale=self.gray_scale)
 
         if seed is not None:

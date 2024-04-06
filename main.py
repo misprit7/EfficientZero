@@ -57,6 +57,10 @@ if __name__ == '__main__':
     parser.add_argument('--load_model', action='store_true', default=False, help='choose to load model')
     parser.add_argument('--model_path', type=str, default='./results/test_model.p', help='load model path')
     parser.add_argument('--object_store_memory', type=int, default=150 * 1024 * 1024 * 1024, help='object store memory')
+    parser.add_argument('--do-consistency-off', action="store_false", default=True, help='Turn off self-supervised consistency loss')
+    parser.add_argument('--use-value-prefix-off', action="store_false", default=True, help='Turn off end-to-end prediction of value prefix')
+    parser.add_argument('--off-correction-off', action="store_false", default=True, help='Turn off model-based off-policy correction')
+
 
     # Minetest specific
     parser.add_argument('--xvfb', action='store_true', default=False, help='whether to start xvfb')
