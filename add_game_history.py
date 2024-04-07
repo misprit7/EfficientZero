@@ -31,7 +31,8 @@ game_config.set_obs_space()
 
 print(game_config.obs_shape)
 
-trajectory = GameHistory(minetest.env.action_space, max_length= game_config.history_length, config=game_config)
+#trajectory = GameHistory(minetest.env.action_space, max_length= game_config.history_length, config=game_config)
+trajectory = GameHistory(minetest.env.action_space, max_length= 3000, config=game_config)
 stack_obs_windows = [minetest.reset() for _ in range(game_config.stacked_observations)]
 trajectory.init(stack_obs_windows)
 

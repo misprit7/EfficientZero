@@ -103,7 +103,7 @@ if __name__ == '__main__':
     device = game_config.device
     try:
         if args.opr == 'train':
-            #wandb.init(project="E0", entity="minetest", sync_tensorboard=True)
+            wandb.init(project="E0", entity="minetest", sync_tensorboard=True)
             summary_writer = SummaryWriter(exp_path, flush_secs=10)
             if args.load_model and os.path.exists(args.model_path):
                 model_path = args.model_path
