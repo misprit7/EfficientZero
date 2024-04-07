@@ -2,6 +2,7 @@ import numpy as np
 from core.game import Game
 from core.utils import arr_to_str, MaxAndSkipEnv, NoopResetEnv, TimeLimit
 import gym
+import random
 
 
 class MinetestWrapper(Game):
@@ -42,6 +43,10 @@ class MinetestWrapper(Game):
         observation = observation.astype(np.uint8)
         print(f'Finished minetest reset: {self.total_reward}')
         self.total_reward = 0
+
+        for _ in range(50):
+            a = random.randrange(0, self.env.action_space.n)
+            observation, reward, done, info = self.env.step(a)
 
         if self.cvt_string:
             observation = arr_to_str(observation)
