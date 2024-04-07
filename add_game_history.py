@@ -1,10 +1,10 @@
 import config.minetest.tasks
 import gymnasium as gym
 import numpy as np
-import time
 import pickle
 import matplotlib.pyplot as plt
 import os
+import keyboard
 plt.ion()
 
 from core.utils import make_minetest
@@ -12,6 +12,11 @@ from core.utils import WarpFrame, TimeLimit
 from core.game import GameHistory
 from config.minetest import game_config
 from core.replay_buffer import ReplayBuffer
+
+def block_terminal_input(event):
+    return False
+
+keyboard.hook(block_terminal_input)
 
 save_directory = "./saved_minetest_games/"
 os.makedirs(save_directory, exist_ok=True)
@@ -49,46 +54,62 @@ total_reward = 0
 total_rewards = []
 policy_targets = []
 while True:
-    s = input()
-    c = 4
-    if s == 'exit' or s == 'q':
+    if keyboard.is_pressed('q'):
         break
-    elif 'r' in s:
-        minetest.env.reset()
+    
+    s = ''
+    if keyboard.is_pressed('a'):
+        s += 'a'
+    elif keyboard.is_pressed('d'):
+        s += 'd'
+    elif keyboard.is_pressed('w'):
+        s += 'w'
+    elif keyboard.is_pressed('s'):
+        s += 's'
+    elif keyboard.is_pressed(' '):
+        s += ' '
+    elif keyboard.is_pressed('e'):
+        s += 'e'
+    # elif keyboard.is_pressed('r'):
+    #     minetest.env.reset()
+    elif keyboard.is_pressed('enter'):
+        s = 'skip'
+    
+    if s:
+        c = 4
+        # Left/right
+        if 'a' in s:
+            c = 1
+        elif 'd' in s:
+            c = 7
+        elif 'w' in s:
+            c = 3
+        elif 's' in s:
+            c = 5
 
-    # Left/right
-    if 'a' in s:
-        c = 1
-    elif 'd' in s:
-        c = 7
-    elif 'w' in s:
-        c = 3
-    elif 's' in s:
-        c = 5
+        # Jump
+        if ' ' in s:
+            c += 9
 
-    if s in [str(i) for i in range(10)]:
-        c = int(s)
+        # Forward
+        if 'e' in s:
+            c += 18
+        
+        if s == 'skip':
+            c = 4
 
-    # Jump
-    if ' ' in s:
-        c += 9
-
-    # Forward
-    if 'e' in s:
-        c += 9
-
-    obs, r, done, info = minetest.step(c)
-    trajectory.append(c, obs, r)
-    policy_target = np.eye(1, trajectory.action_space_size, c)[0]
-    policy_targets.append(policy_target.astype(int).tolist())
-    print(step)
-    print('r: ', r)
-    minetest.env.render()
-    # plt.imshow(obs)
-    # plt.show()
-    step+=1
-    total_reward += r
-    total_rewards.append(total_reward)
+        obs, r, done, info = minetest.step(c)
+        trajectory.append(c, obs, r)
+        policy_target = np.eye(1, trajectory.action_space_size, c)[0]
+        policy_targets.append(policy_target.astype(int).tolist())
+        print(step)
+        print('r: ', r)
+        minetest.env.render()
+        # plt.imshow(obs)
+        # plt.show()
+        step+=1
+        total_reward += r
+        total_rewards.append(total_reward)
 
 minetest.close()
 
