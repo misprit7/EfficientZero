@@ -158,9 +158,10 @@ def test(config, model, counter, test_episodes, device, render, save_video=False
         for env in envs:
             env.close()
 
-        for i in range(test_episodes):
-            with imageio.get_writer(f'{save_path}/test_{i}.mp4', fps=5) as video:
-                for frame in frames[i]:
-                    video.append_data(frame)
+        if save_video:
+            for i in range(test_episodes):
+                with imageio.get_writer(f'{save_path}/test_{i}.mp4', fps=5) as video:
+                    for frame in frames[i]:
+                        video.append_data(frame)
 
     return ep_ori_rewards, step, save_path

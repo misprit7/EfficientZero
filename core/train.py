@@ -448,6 +448,8 @@ def train(config, summary_writer, model_path=None):
     batch_storage = QueueStorage(15, 20)
     mcts_storage = QueueStorage(18, 25)
     replay_buffer = ReplayBuffer.remote(config=config)
+    if config.pre_populate_buffer:
+        replay_buffer.populate_sample_games.remote(config.games_path)
 
     # other workers
     workers = []

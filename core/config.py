@@ -275,6 +275,10 @@ class BaseConfig(object):
         self.priority_prob_beta = 0.4
         self.prioritized_replay_eps = 1e-6
 
+        #pre-populating replay buffer
+        self.pre_populate_buffer = False
+        self.games_path = None
+
         # env
         self.image_channel = 3
 
@@ -389,6 +393,7 @@ class BaseConfig(object):
         self.do_consistency = args.do_consistency_off
         self.use_value_prefix = args.use_value_prefix_off
         self.off_correction = args.off_correction_off
+        self.pre_populate_buffer = args.use_saved_games
 
         if not self.do_consistency:
             self.consistency_coeff = 0
@@ -423,4 +428,5 @@ class BaseConfig(object):
 
         self.model_path = os.path.join(self.exp_path, 'model.p')
         self.model_dir = os.path.join(self.exp_path, 'model')
+        self.games_path = args.saved_games_path
         return self.exp_path
