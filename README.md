@@ -1,3 +1,20 @@
+# EfficientZero for Minetest
+
+This is an implementation of Minetest inside the EfficientZero reference implementation.
+
+## Commands
+* Train: `python main.py --env minetester-treechop_shaped-v0 --case minetest --opr train --amp_type torch_amp --num_gpus 8 --num_cpus 30 --cpu_actor 10 --gpu_actor 8 --force`
+* Test: `python main.py --env minetester-treechop_shaped-v0 --case minetest --opr test --amp_type torch_amp --num_gpus 8 --load_model --model_path model.p`
+* Collect replay data: `python add_game_history.py`
+
+|Additional Arguments | Description|
+|:-------------|:-------------|
+| `--do-consistency-off`                           |Disable self consistency loss
+| `--use-value-prefix-off`                           |Disable value prefix
+| `--off-correction-off`                           |Disable off policy correction
+| `--use_saved_games`                           |Use manually gathered replay data to prepopulate buffer
+| `--saved_games_path`                           |Path for manual replay data
+
 # EfficientZero (NeurIPS 2021)
 Open-source codebase for EfficientZero, from ["Mastering Atari Games with Limited Data"](https://arxiv.org/abs/2111.00210) at NeurIPS 2021.
 
