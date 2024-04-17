@@ -40,12 +40,12 @@ while True:
         c = 5
 
     # Jump
-    # if ' ' in s:
-    #     c += 9
+    if ' ' in s:
+        c += 9
 
     # Forward
     if 'e' in s:
-        c += 9
+        c += 18
 
     obs, r, done, info = env.step(c)
     print('r: ', r)
