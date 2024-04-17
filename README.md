@@ -1,6 +1,6 @@
 # EfficientZero for Minetest
 
-This is an implementation of Minetest inside the EfficientZero reference implementation.
+This is an implementation of Minetest inside the EfficientZero reference implementation. For minetest compatibility, use python 3.8 (not 3.7 like in the original readme).
 
 ## Commands
 * Train: `python main.py --env minetester-treechop_shaped-v0 --case minetest --opr train --amp_type torch_amp --num_gpus 8 --num_cpus 30 --cpu_actor 10 --gpu_actor 8 --force`
